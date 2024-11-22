@@ -56,9 +56,31 @@ import { StringCalculator } from "../stringCalculator";
 
 describe("String calculator", () => {
   let stringCalc: StringCalculator;
-  
+
   beforeEach(() => {
     stringCalc = new StringCalculator();
+  });
+
+  it("should handle multiple delimiters with varying lengths", () => {
+    const result = stringCalc.add("//[***][%%]\n1***2%%3");
+    expect(result).toBe(6); // 1 + 2 + 3 = 6
+  });
+
+  it("should throw an error for negative numbers", () => {
+    expect(() => stringCalc.add("1,-2,3,-4")).toThrow(
+      "Negatives not allowed: -2, -4"
+    );
+  });
+
+  it("should ignore numbers greater than 1000", () => {
+    const result = stringCalc.add("2,1001");
+    expect(result).toBe(2);
+  });
+
+  it("should count how many times Add is invoked", () => {
+    stringCalc.add("1,2");
+    stringCalc.add("3,4");
+    expect(stringCalc.getCalledCount()).toBe(2);
   });
 
   it("should take an empty string", () => {
@@ -76,25 +98,18 @@ describe("String calculator", () => {
     expect(result).toBe(3);
   });
 
-  it('should add a string with a baggilion #s', () => {
+  it("should add a string with a baggilion #s", () => {
     const result = stringCalc.add("1,2,3,4");
     expect(result).toBe(10);
-  })
+  });
 
-  it('should handle new lines and commas', () => {
+  it("should handle new lines and commas", () => {
     const result = stringCalc.add("1,2\n3,4");
     expect(result).toBe(10);
-    
-  })
+  });
 
-  it('should support custom delimiters outline by //', () => {
+  it("should support custom delimiters outline by //", () => {
     const result = stringCalc.add("//;\n1;2");
     expect(result).toBe(3);
-    
-  })
-  
-  
-  
-
-  
+  });
 });
